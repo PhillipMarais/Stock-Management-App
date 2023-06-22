@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "stock-management-demo": {
+      "hosting": {
+        "Stock-Management-App": [
+          "stock-management-demo"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "stock-management-demo"
+  }
+}
