@@ -1,13 +1,14 @@
-export interface Vehicle {
-    registration_number :string,
-    manufacturer :string,
-    model_description :string,
-    model_year :string,
-    KMS :string,
-    colour :string,
-    VIN :string,
-    retail_price :string,
-    cost_price  :string,
-    DTCreated :string,
-    DTUpdated :string,
+export class Vehicle {
+    id?="";
+    model_year ="";
+    model_description ="";
+    manufacturer ="";
+    colour ="";
+    registration_number="";
+    vin ="";
+    kms ="";
+    retail_price ="";
+    cost_price  ="";
+    dt_created ="";
+    dt_updated ="";
 }

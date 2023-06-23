@@ -1,1 +1,30 @@
-<p>dashboard works!</p>
+<table>
+  <thead>
+    <th> model_year</th>
+    <th> model_description</th>
+    <th> manufacturer</th>
+    <th> colour</th>
+    <th> registration_number</th>
+    <th> vin</th>
+    <th> kms</th>
+    <th> retail_price</th>
+    <th> cost_price</th>
+    <th> dt_created</th>
+    <th> dt_updated</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let vehicle of vehicles">
+      <td> {{vehicle.model_year}}</td>
+      <td> {{vehicle.model_description}}</td>
+      <td> {{vehicle.manufacturer}}</td>
+      <td> {{vehicle.colour}}</td>
+      <td> {{vehicle.registration_number}}</td>
+      <td> {{vehicle.vin}}</td>
+      <td> {{vehicle.kms}}</td>
+      <td> {{vehicle.retail_price}}</td>
+      <td> {{vehicle.cost_price}}</td>
+      <td> {{vehicle.dt_created}}</td>
+      <td> {{vehicle.dt_updated}}</td>
+    </tr>
+  </tbody>
+</table>

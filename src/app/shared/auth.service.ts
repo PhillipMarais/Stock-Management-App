@@ -14,8 +14,8 @@ export class AuthService {
   user will be navigated to the dashboard, otherise
   they will be navigated to the login.
   @params
-  -email : user's email 
-  -password : user's password 
+  -email : user's email
+  -password : user's password
   */
   login(email: string, password: string) {
     this.fireAuth.signInWithEmailAndPassword(email, password).then(
@@ -40,8 +40,8 @@ export class AuthService {
   user will be navigated to the login, otherise
   they will be navigated to the register.
   @params
-  -email : user's email 
-  -password : user's password 
+  -email : user's email
+  -password : user's password
   */
   register(email: string, password: string) {
     this.fireAuth.createUserWithEmailAndPassword(email, password).then(
@@ -61,8 +61,8 @@ export class AuthService {
   user will be navigated to the login, otherise
   they will be navigated to the register.
   @params
-  -email : user's email 
-  -password : user's password 
+  -email : user's email
+  -password : user's password
   */
   sendEmailForVerification(user: any) {
     user.sendEmailForVerification().then(
