@@ -1,14 +1,14 @@
 export class Vehicle {
     id?="";
-    model_year ="";
-    model_description ="";
+    modelYear ="";
+    modelDescription ="";
     manufacturer ="";
     colour ="";
-    registration_number="";
+    registrationNumber="";
     vin ="";
-    kms ="";
-    retail_price ="";
-    cost_price  ="";
-    dt_created ="";
-    dt_updated ="";
+    kilometreReading ="";
+    retailPrice ="";
+    costPrice  ="";
+    dtCreated ="";
+    dtUpdated ="";
 }

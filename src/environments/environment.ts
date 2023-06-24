@@ -7,4 +7,5 @@ export const environment = {
     authDomain: 'stock-management-demo.firebaseapp.com',
     messagingSenderId: '319526064589',
   },
+  apiUrl: "https://localhost:7199/api"
 };

@@ -1,27 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from '../model/vehicle';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  private url = "Vehicle";
+  constructor(private http: HttpClient) { }
 
-  constructor() { }
-
-  public getVehicles() : Vehicle[] {
-    let vehicleToSend = new Vehicle();
-    vehicleToSend.registration_number = '1' ;
-    vehicleToSend.manufacturer = '1' ;
-    vehicleToSend.model_description ='1';
-    vehicleToSend.model_year ='1';
-    vehicleToSend.kms ='1';
-    vehicleToSend.colour ='1';
-    vehicleToSend.vin ='1';
-    vehicleToSend.retail_price ='1';
-    vehicleToSend.cost_price  ='1';
-    vehicleToSend.dt_created ='1';
-    vehicleToSend.dt_updated ='1';
-
-    return [vehicleToSend]
+  public getVehicles() : Observable<Vehicle[]> {
+    return this.http.get<Vehicle[]>(`${environment.apiUrl}/${this.url}`);
   }
 }
