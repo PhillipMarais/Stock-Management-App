@@ -1,30 +1,122 @@
-<table>
-  <thead>
-    <th> model_year</th>
-    <th> model_description</th>
-    <th> manufacturer</th>
-    <th> colour</th>
-    <th> registration_number</th>
-    <th> vin</th>
-    <th> kms</th>
-    <th> retail_price</th>
-    <th> cost_price</th>
-    <th> dt_created</th>
-    <th> dt_updated</th>
-  </thead>
-  <tbody>
-    <tr *ngFor="let vehicle of vehicles">
-      <td> {{vehicle.modelYear}}</td>
-      <td> {{vehicle.modelDescription}}</td>
-      <td> {{vehicle.manufacturer}}</td>
-      <td> {{vehicle.colour}}</td>
-      <td> {{vehicle.registrationNumber}}</td>
-      <td> {{vehicle.vin}}</td>
-      <td> {{vehicle.kilometreReading}}</td>
-      <td> {{vehicle.retailPrice}}</td>
-      <td> {{vehicle.costPrice}}</td>
-      <td> {{vehicle.dtCreated}}</td>
-      <td> {{vehicle.dtUpdated}}</td>
-    </tr>
-  </tbody>
-</table>
+<body>
+  <!--Toolbar-->
+  <main>
+    <div class="toolbar">
+      <!--Add Stock-->
+      <div class="add-stock">
+        <button type="button" class="btn btn-outline-success btn-btn-lg" data-bs-toggle="modal"
+          data-bs-target="#addVehicleModal">Add Stock</button>
+      </div>
+    </div>
+
+    <nav class="navbar">
+      <input class="form-control" type="text" name="model" [(ngModel)]="manufacturerFilter"
+        (ngModelChange)="SearchManufacturer()" placeholder="Stock Model Manufacturer">
+    </nav>
+
+    <!--Stock-->
+    <div class="Stock black-border">
+      <div class="vehicles ">
+
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+          </ul>
+        </nav>
+
+        <div class="row mt-4" *ngFor="let vehicle of vehiclesToDisplay; let ei=index;">
+          <div class="col">
+
+            <app-stock [vehicle]="vehicle" (onRemoveStock)="removeStock($event)">
+
+            </app-stock>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+
+<!-- Add Stock Modal -->
+<div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Vehicle Details</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="vehicleForm">
+
+          <div class="row">
+            <!--Manufacturer-->
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Manufacturer" formControlName="manufacturer">
+            </div>
+            <!--Colour-->
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Colour" formControlName="colour">
+            </div>
+          </div>
+
+          <!--Model Description-->
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Model Description" id="modelDescriptionInput"
+              style="height: 60px" formControlName="modelDescription"></textarea>
+            <label for="modelDescriptionInput">Model Description</label>
+          </div>
+
+          <div class="row">
+            <!--Kilometre Reading-->
+            <div class="col">
+              <input type="number" class="form-control" placeholder="Kilometre Reading (Km)"
+                formControlName="kilometreReading">
+            </div>
+            <!--Model Year-->
+            <div class="col">
+              <input type="number" class="form-control" placeholder="Model Year (YYYY)" formControlName="modelYear">
+            </div>
+          </div>
+
+          <div class="row">
+            <!--Registration Number-->
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Registration Number"
+                formControlName="registrationNumber">
+            </div>
+            <!--VIN-->
+            <div class="col">
+              <input type="text" class="form-control" placeholder="VIN" formControlName="vin">
+            </div>
+          </div>
+
+          <div class="row mt-1">
+            <!--Cost Price-->
+            <div class="col">
+              <input type="number" class="form-control" placeholder="Cost Price (R)" formControlName="costPrice">
+            </div>
+            <!--Retail Price-->
+            <div class="col">
+              <input type="number" class="form-control" placeholder="Retail Price (R)" formControlName="retailPrice">
+            </div>
+          </div>
+
+          <!--images-->
+          <div class="row mt-3">
+            <div class="col">
+              <label for="vehicleImages" class="form-label">Images</label>
+              <input multiple type="file" class="form-control" id="vehicleImages" #fileInput>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closeForm>Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addStock()">Add Vehicle</button>
+      </div>
+    </div>
+  </div>
+</div>

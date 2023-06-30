@@ -2,11 +2,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StockManagementAPI.Data;
+using Microsoft.AspNetCore.Cors;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace StockManagementAPI.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+
+
   public class VehicleController : ControllerBase
   {
     private readonly DataContext _context;
@@ -37,7 +49,7 @@ namespace StockManagementAPI.Controllers
       var dbVehicle = await _context.Vehicles.FindAsync(vehicle.Id);
       if (dbVehicle == null)
         return BadRequest("Vehicle does not exist");
-      
+
       dbVehicle.RegistrationNumber = vehicle.RegistrationNumber;
       dbVehicle.Manufacturer = vehicle.Manufacturer;
       dbVehicle.ModelDescription = vehicle.ModelDescription;

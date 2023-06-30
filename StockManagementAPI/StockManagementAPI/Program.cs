@@ -3,10 +3,7 @@ using StockManagementAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => {
@@ -14,18 +11,21 @@ builder.Services.AddDbContext<DataContext>(options => {
 });
 builder.Services.AddCors(options => options.AddPolicy(name: "StockManagement",
   policy => {
-    policy.WithOrigins("http://localhost:4200", "https://localhost:7199").AllowAnyMethod().AllowAnyHeader();
+    policy.WithOrigins( "https://localhost:7199", "http://localhost:4200", "http://localhost:8082", "https://stock-management-demo.web.app").AllowAnyMethod().AllowAnyHeader();
   })
 );
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("StockManagement");
 
