@@ -3,8 +3,6 @@ import { Vehicle } from '../../model/vehicle';
 import { DataService } from 'src/app/shared/data.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe, formatDate } from '@angular/common';
-import { Ng2OrderModule } from 'ng2-order-pipe';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,12 +17,22 @@ export class DashboardComponent {
   vehicles: Vehicle[] = [];
   vehicleForm: FormGroup;
   vehiclesToDisplay: Vehicle[] = [];
+
   newDate: Date = new Date();
+  reverse:boolean = false;
+
   manufacturerFilter: any;
+
+  page: number = 1;
+  tableSize: number = 3;
+  tablesizes: any = [5, 10, 15, 20];
+  count: number = 0;
+
   constructor(private datePipe: DatePipe, private dataService: DataService, private fb: FormBuilder){
     this.vehicleForm = fb.group({});
   }
 
+  //gets and sets data for stock
   ngOnInit() : void {
     this.dataService.getVehicles().subscribe((res: Vehicle[]) => {
       this.vehicles = res;
@@ -45,9 +53,32 @@ export class DashboardComponent {
     })
   }
 
-  SearchManufacturer(){
+  //------------Pagination------------
+  onTableDataChange(event: any) {
+    this.page = event;
+    this.ngOnInit();
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+    this.ngOnInit();
+  }
+
+  //------------Sorting------------
+  sort (key: string) {
+    if(this.reverse){
+      this.vehiclesToDisplay.sort((a,b) => b.manufacturer.localeCompare(a.manufacturer));
+    } else
+    this.vehiclesToDisplay.sort((a,b) => a.manufacturer.localeCompare(b.manufacturer));
+    this.reverse = !this.reverse;
+  }
+
+  //------------Filters------------
+  SearchManufacturer() {
     if(this.manufacturerFilter == ""){
       this.ngOnInit();
+      this.applyOtherFilters();
     } else {
       this.vehiclesToDisplay = this.vehicles.filter(res => {
         return res.manufacturer.toLowerCase().match(this.manufacturerFilter.toLowerCase());
@@ -55,6 +86,11 @@ export class DashboardComponent {
     }
   }
 
+  applyOtherFilters() {
+
+  }
+
+  //------------Buttons------------
   addStock() {
     let vehicle: Vehicle = {
       manufacturer: this.Manufacturer.value,

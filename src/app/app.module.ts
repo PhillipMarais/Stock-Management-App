@@ -27,6 +27,7 @@ import { StockComponent } from './component/stock/stock.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ViewStockComponent } from './component/view-stock/view-stock.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [

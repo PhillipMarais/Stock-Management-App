@@ -3,8 +3,6 @@ import { Component, EventEmitter, Input, Output, Inject } from '@angular/core';
 import { Vehicle } from 'src/app/model/vehicle';
 import {MatDialog, MatDialogRef, MatDialogModule, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { Ng2OrderModule } from 'ng2-order-pipe';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @Component({
   selector: 'app-stock',

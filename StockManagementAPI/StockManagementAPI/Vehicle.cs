@@ -10,6 +10,7 @@ namespace StockManagementAPI
     public int KilometreReading { get; set; } = 0;
     public string Colour { get; set; } = string.Empty;
     public string VIN { get; set; } = string.Empty;
+    public string Accessories { get; set; } = string.Empty;
     public int RetailPrice  { get; set; } = 0;
     public int CostPrice { get; set; } = 0;
     public DateTime DTCreated { get; set; }

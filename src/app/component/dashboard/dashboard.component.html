@@ -18,14 +18,25 @@
     <div class="Stock black-border">
       <div class="vehicles ">
 
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-          </ul>
-        </nav>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th (click)="sort('manufacturer')">Manufacturer&nbsp;<i class="fa fa-sort"></i></th>
+              <th>Model</th>
+            </tr>
+          </thead>
+        </table>
 
-        <div class="row mt-4" *ngFor="let vehicle of vehiclesToDisplay; let ei=index;">
+        <div>
+          <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+          </pagination-controls>
+        </div>
+
+        <div class="row mt-4" *ngFor="let vehicle of vehiclesToDisplay | paginate:{
+          itemsPerPage: tableSize,
+          currentPage: page,
+          totalItems: count
+        } ; let ei=index;">
           <div class="col">
 
             <app-stock [vehicle]="vehicle" (onRemoveStock)="removeStock($event)">

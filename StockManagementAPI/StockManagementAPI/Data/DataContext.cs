@@ -7,5 +7,7 @@ namespace StockManagementAPI.Data
     public DataContext(DbContextOptions<DataContext> options): base(options) { }
 
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
+    public DbSet<StockImages> StockImages => Set<StockImages>();
+    public DbSet<Accessory> Accessories => Set<Accessory>();
   }
 }
