@@ -48,8 +48,7 @@ app-stock {
 }
 
 
-#addVehicleModal .form-control{
-  margin-bottom: 1rem;
+.ModalInput{
+  margin-bottom: 20px;
 }
-
 

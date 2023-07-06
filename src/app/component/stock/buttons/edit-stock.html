@@ -1,62 +1,10 @@
-<body>
-  <!--Toolbar-->
-  <main>
-    <div class="toolbar">
-      <!--Add Stock-->
-      <div class="add-stock">
-        <button type="button" class="btn btn-outline-success btn-btn-lg" data-bs-toggle="modal"
-          data-bs-target="#addVehicleModal">Add Stock</button>
-      </div>
-    </div>
-
-    <nav class="navbar">
-      <input class="form-control" type="text" name="model" [(ngModel)]="manufacturerFilter"
-        (ngModelChange)="SearchManufacturer()" placeholder="Stock Model Manufacturer">
-    </nav>
-
-    <!--Stock-->
-    <div class="Stock black-border">
-      <div class="vehicles ">
-
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th (click)="sort('manufacturer')">Manufacturer&nbsp;<i class="fa fa-sort"></i></th>
-              <th>Model</th>
-            </tr>
-          </thead>
-        </table>
-
-        <div>
-          <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
-          </pagination-controls>
-        </div>
-
-        <div class="row mt-4" *ngFor="let vehicle of vehiclesToDisplay | paginate:{
-          itemsPerPage: tableSize,
-          currentPage: page,
-          totalItems: count
-        } ; let ei=index;">
-          <div class="col">
-
-            <app-stock [vehicle]="vehicle" (onRemoveStock)="removeStock($event)">
-
-            </app-stock>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </main>
-</body>
-
 <!-- Add Stock Modal -->
-<div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+<div id="editVehicleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false" style="padding: 20px;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Vehicle Details</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Vehicle Details</h1>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="vehicleForm">
@@ -177,8 +125,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closeForm>Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="addStock()">Add Vehicle</button>
+        <button type="button" class="btn btn-secondary" (click)="closeModal()" #closeForm>Cancel</button>
+        <button type="button" class="btn btn-primary" style="margin-left: 10px;" (click)="saveStock()">Save</button>
       </div>
     </div>
   </div>

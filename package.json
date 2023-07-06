@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
     "angular-bootstrap-md": "^4.3.2",
+    "mdb-angular-ui-kit": "^5.0.0",
     "moment": "^2.29.4",
     "ng2-order-pipe": "^0.1.5",
     "ng2-search-filter": "^0.5.1",

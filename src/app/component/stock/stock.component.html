@@ -45,7 +45,6 @@
         </div>
 
         <div class="row">
-
           <table class="table table-hover mx-auto">
             <thead class="text-center fs-5 fst-italic text-secondary">
               <tr>
@@ -67,18 +66,16 @@
               </tr>
             </tbody>
           </table>
-
         </div>
-
-
-
       </div>
     </div>
   </div>
 </div>
 <div class="d-grid gap-2 d-md-flex justify-content-md-end" role="group" style="padding: 1rem;">
-  <button type="button" class="btn btn-outline-info btn-sm" (click)="openDialog('0ms', '0ms', 'view')">View</button>
-  <button type="button" class="btn btn-outline-success btn-sm"
-    (click)="openDialog('0ms', '0ms', 'delete')">Edit</button>
-  <button mat-raised-button (click)="openDialog('0ms', '0ms', 'delete')">Delete</button>
+  <button mat-raised-button style="color: #f0fff3; background-color: #4bc0c4;"
+    (click)="openDialog('0ms', '0ms', 'view')">Details</button>
+  <button mat-raised-button style="color: #f0fff3; background-color: #4baf53;"
+    (click)="openDialog('0ms', '0ms', 'edit')">Edit</button>
+  <button mat-raised-button style="color: #f0fff3; background-color: #ca1313;"
+    (click)="openDialog('0ms', '0ms', 'delete')">Delete</button>
 </div>

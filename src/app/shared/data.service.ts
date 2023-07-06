@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Vehicle } from '../model/vehicle';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -25,5 +25,21 @@ export class DataService {
 
   public deleteVehicle(id: number): Observable<Vehicle[]> {
     return this.http.delete<Vehicle[]>(`${environment.apiUrl}/${this.url}/${id}`);
+  }
+
+  public getStockImages( ): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/StockImages`);
+  }
+
+  public createStockImage(files: FileList, id: number): Observable<any> {
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('images', files[i]);
+    }
+    return this.http.post<any>(`${environment.apiUrl}/StockImages/${id}`, formData);
+  }
+
+  public deleteStockImage(id: number): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/StockImages/${id}`);
   }
 }

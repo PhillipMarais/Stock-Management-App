@@ -28,6 +28,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ViewStockComponent } from './component/view-stock/view-stock.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { OrderModule } from 'ngx-order-pipe';
+import { Ng2OrderModule } from 'ng2-order-pipe';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @NgModule({
   declarations: [

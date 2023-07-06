@@ -1,8 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Vehicle } from '../../model/vehicle';
 import { DataService } from 'src/app/shared/data.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe, formatDate } from '@angular/common';
+import { Accessory } from 'src/app/model/accessory';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,9 +19,12 @@ export class DashboardComponent {
   vehicles: Vehicle[] = [];
   vehicleForm: FormGroup;
   vehiclesToDisplay: Vehicle[] = [];
-
   newDate: Date = new Date();
   reverse:boolean = false;
+  imageSource: SafeResourceUrl;
+  Accessories: Accessory[];
+  AccessoryToAddName: string ='';
+  AccessoryToAddDesc: string ='';
 
   manufacturerFilter: any;
 
@@ -28,16 +33,21 @@ export class DashboardComponent {
   tablesizes: any = [5, 10, 15, 20];
   count: number = 0;
 
-  constructor(private datePipe: DatePipe, private dataService: DataService, private fb: FormBuilder){
+
+  constructor(private sanitizer: DomSanitizer, private datePipe: DatePipe, private dataService: DataService, private fb: FormBuilder){
     this.vehicleForm = fb.group({});
+    this.Accessories = [];
+    this.imageSource = [];
   }
 
   //gets and sets data for stock
   ngOnInit() : void {
     this.dataService.getVehicles().subscribe((res: Vehicle[]) => {
-      this.vehicles = res;
-      this.vehiclesToDisplay = this.vehicles;
+      this.vehiclesToDisplay = this.vehicles = res;
       console.log(this.vehicles);
+      this.dataService.getStockImages().subscribe((res) => {
+      this.imageSource = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + res[2].image);
+      });
     });
 
     this.vehicleForm = this.fb.group({
@@ -49,8 +59,8 @@ export class DashboardComponent {
       registrationNumber: this.fb.control(''),
       vin: this.fb.control(''),
       costPrice : this.fb.control(''),
-      retailPrice: this.fb.control('')
-    })
+      retailPrice: this.fb.control(''),
+    });
   }
 
   //------------Pagination------------
@@ -92,6 +102,11 @@ export class DashboardComponent {
 
   //------------Buttons------------
   addStock() {
+    let accesoryString ='';
+    const files: FileList = this.fileInput.nativeElement.files;
+    this.Accessories.forEach(accesory => {
+      accesoryString = accesoryString + '%/%' + accesory.Name + '%-%' + accesory.Description;
+    });
     let vehicle: Vehicle = {
       manufacturer: this.Manufacturer.value,
       colour: this.Colour.value,
@@ -102,23 +117,62 @@ export class DashboardComponent {
       vin: this.VIN.value,
       costPrice: this.CostPrice.value,
       retailPrice: this.RetailPrice.value,
+      accessories: accesoryString,
+      imagesArray:[],
       dtCreated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
       dtUpdated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
     };
 
-    this.fileInput.nativeElement.files
     this.dataService.createVehicle(vehicle).subscribe((res) => {
-      this.vehicles = res;
-      this.clearForm();
-      this.closeForm.nativeElement.click();
-      this.ngOnInit();
+      let id = (Number)(res[res.length - 1].id);
+      if(files.length > 0){
+        this.dataService.createStockImage(files, id).subscribe(
+        response => {
+        alert("new stock added");
+        console.log('File uploaded successfully');
+        this.vehicles = response;
+        this.clearForm();
+        this.closeForm.nativeElement.click();
+        this.ngOnInit();
+      },
+      error => {
+        console.error('Error uploading file:', error);
+      });
+      }
+    },error => {
+        alert('Error Adding Vehicle:' + error);
     });
+  }
+
+  accessoryToAddName(value: string){
+    this.AccessoryToAddName = value;
+  }
+
+  accessoryToAddDesc(value: string){
+    this.AccessoryToAddDesc = value;
+  }
+
+  addAccessory(): void {
+    let newAccesory = new Accessory();
+    newAccesory.Name = this.AccessoryToAddName;
+    newAccesory.Description = this.AccessoryToAddDesc;
+    this.Accessories.push(newAccesory)
+  }
+
+  removeAccessory(accName: string, accDesc: string): void {
+    console.log(accDesc, accName)
+    const indexToRemove = this.Accessories.findIndex(
+      item => item.Name === accName && item.Description === accDesc
+    );
+    this.Accessories.splice(indexToRemove, 1);
   }
 
   removeStock(event: any) {
     this.dataService.deleteVehicle(event).subscribe((res) => {
-      this.vehicles = res;
-      this.ngOnInit();
+      this.dataService.deleteStockImage(event).subscribe((res) => {
+        this.vehicles = res;
+        this.ngOnInit();
+      });
     });
   }
 
@@ -162,5 +216,4 @@ export class DashboardComponent {
   public get RetailPrice(): FormControl {
     return this.vehicleForm.get('retailPrice') as FormControl;
   }
-
 }

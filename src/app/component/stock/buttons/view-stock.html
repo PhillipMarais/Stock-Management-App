@@ -1,0 +1,108 @@
+<div style="overflow: auto; max-height: 800px;">
+  <div class="container-fluid g-0 p-2">
+    <div class="row g-0 d-flex justify-content-center align-items-center">
+
+      <div class="col-md-2">
+        <img src="../../../assets/google_icon.png" alt="Profile Image" class="profileView">
+      </div>
+
+      <div class="row g-0">
+
+        <div class="col-md-10 text-center">
+          <span class="manufacturer">{{vehicle.manufacturer}}</span>
+        </div>
+
+
+
+      </div>
+      <div class="row g-0 mt-3">
+        <table class="table table-hover mx-auto">
+
+          <thead class="text-center fs-5 fst-italic text-secondary">
+            <tr>
+              <td colspan="2">Stock Details:</td>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Model</td>
+              <td>{{vehicle.modelDescription}}</td>
+            </tr>
+            <tr>
+              <td>Model Year</td>
+              <td>{{vehicle.modelYear}}</td>
+            </tr>
+            <tr>
+              <td>Kilometres</td>
+              <td>Km {{vehicle.kilometreReading}}</td>
+            </tr>
+            <tr>
+              <td>Colour</td>
+              <td>{{vehicle.colour}}</td>
+            </tr>
+            <tr>
+              <td>Identification Number</td>
+              <td>{{vehicle.vin}}</td>
+            </tr>
+            <tr>
+              <td>Registration Number</td>
+              <td>{{vehicle.registrationNumber}}</td>
+            </tr>
+          </tbody>
+
+          <thead class="text-center fs-5 fst-italic text-secondary">
+            <tr>
+              <td colspan="2">Price Details</td>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Cost Price</td>
+              <td>R {{vehicle.costPrice}}</td>
+            </tr>
+            <tr>
+              <td>Retail Price</td>
+              <td>R {{vehicle.retailPrice}}</td>
+            </tr>
+          </tbody>
+
+          <thead class="text-center fs-5 fst-italic text-secondary">
+            <tr>
+              <td colspan="2">Accessories:</td>
+            </tr>
+          </thead>
+
+          <tbody *ngFor="let accessory of Accessories">
+            <tr>
+              <td>{{accessory.Name}}</td>
+              <td>{{accessory.Description}}</td>
+            </tr>
+          </tbody>
+          <div>
+
+          </div>
+
+
+          <thead class="text-center fs-5 fst-italic text-secondary">
+            <tr>
+              <td colspan="2">Date:</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Added</td>
+              <td>{{vehicle.dtUpdated}}</td>
+            </tr>
+            <tr>
+              <td>Last Updated</td>
+              <td>{{vehicle.dtUpdated}}</td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

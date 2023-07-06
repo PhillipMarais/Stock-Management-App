@@ -8,6 +8,5 @@ namespace StockManagementAPI.Data
 
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<StockImages> StockImages => Set<StockImages>();
-    public DbSet<Accessory> Accessories => Set<Accessory>();
   }
 }
