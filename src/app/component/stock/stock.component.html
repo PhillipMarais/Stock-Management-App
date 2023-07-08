@@ -1,29 +1,34 @@
-<div class="container-fluid g-0 p-2">
+<div class="container-fluid g-0 p-2" style="
+    background: whitesmoke;">
   <div class="row g-0">
 
-    <div class="col-md-2 d-flex justify-content-center align-items-center">
-      <img src="../../../assets/google_icon.png" alt="Profile Image" class="profile">
+    <div class="col-md-4 stockImageContainer">
+      <img class="stockImage" *ngIf="vehicle.imagesArray && vehicle.imagesArray.length > 0"
+        [src]="'data:image/png;base64,' + vehicle.imagesArray[0]" alt="Vehicle Image">
     </div>
 
     <div class="col ps-2">
 
-      <div class="row g-0">
+      <div class="row g-0" style="justify-content: center;">
 
-        <div class="col-md-10 text-center">
+        <div class="col-md-10 bg-dark stockHeader">
           <span class="manufacturer">{{vehicle.manufacturer}}</span>
         </div>
 
 
 
       </div>
-      <div class="row g-0 mt-3">
+      <div class="row g-0 mt-3" style="line-height: normal; background-color: whitesmoke;">
 
         <div class="row-md">
 
           <table class="table table-hover mx-auto">
             <thead class="text-center fs-5 fst-italic text-secondary">
               <tr>
-                <td colspan="2">Stock Details</td>
+                <td colspan="2" style="
+                  background: whitesmoke;
+                  text-decoration: underline;">
+                  Stock Details</td>
               </tr>
             </thead>
             <tbody>
@@ -44,11 +49,14 @@
 
         </div>
 
-        <div class="row">
+        <div class="row-md">
           <table class="table table-hover mx-auto">
             <thead class="text-center fs-5 fst-italic text-secondary">
               <tr>
-                <td colspan="2">Price Details</td>
+                <td colspan="2" style="
+                  background: whitesmoke;
+                  text-decoration: underline;">
+                  Price Details</td>
               </tr>
             </thead>
             <tbody>
@@ -60,22 +68,18 @@
                 <td>Retail Price</td>
                 <td>R {{vehicle.retailPrice}}</td>
               </tr>
-              <tr>
-                <td>Last Updated</td>
-                <td>{{vehicle.dtUpdated}}</td>
-              </tr>
             </tbody>
           </table>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end" role="group" style="padding-bottom: 10px;">
+            <button mat-raised-button style="color: #f0fff3; background-color: #4bc0c4;"
+              (click)="openDialog('0ms', '0ms', 'view')">Details</button>
+            <button mat-raised-button style="color: #f0fff3; background-color: #4baf53;"
+              (click)="openDialog('0ms', '0ms', 'edit')">Edit</button>
+            <button mat-raised-button style="color: #f0fff3; background-color: #ca1313; margin-right: 5%;"
+              (click)="openDialog('0ms', '0ms', 'delete')">Delete</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<div class="d-grid gap-2 d-md-flex justify-content-md-end" role="group" style="padding: 1rem;">
-  <button mat-raised-button style="color: #f0fff3; background-color: #4bc0c4;"
-    (click)="openDialog('0ms', '0ms', 'view')">Details</button>
-  <button mat-raised-button style="color: #f0fff3; background-color: #4baf53;"
-    (click)="openDialog('0ms', '0ms', 'edit')">Edit</button>
-  <button mat-raised-button style="color: #f0fff3; background-color: #ca1313;"
-    (click)="openDialog('0ms', '0ms', 'delete')">Delete</button>
 </div>

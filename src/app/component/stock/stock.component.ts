@@ -1,13 +1,33 @@
-import { formatDate } from '@angular/common';
-import { Component, EventEmitter, Input, Output, Inject, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule, formatDate } from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  Inject,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { Vehicle } from 'src/app/model/vehicle';
-import {MatDialog, MatDialogRef, MatDialogModule, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatDialogModule,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { Accessory } from 'src/app/model/accessory';
-import {NgFor, NgForOf} from "@angular/common";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule  } from '@angular/forms';
+import { NgFor, NgForOf } from '@angular/common';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { DataService } from 'src/app/shared/data.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-stock',
@@ -17,8 +37,9 @@ import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 export class StockComponent {
   @Input() vehicle: Vehicle;
   @Output() onRemoveStock = new EventEmitter<number>();
+  imageSource: SafeResourceUrl;
 
-  constructor(public dialog: MatDialog){
+  constructor(public dialog: MatDialog, private sanitizer: DomSanitizer) {
     this.vehicle = {
       manufacturer: '',
       colour: '',
@@ -27,27 +48,33 @@ export class StockComponent {
       modelYear: 0,
       registrationNumber: '',
       vin: '',
-      costPrice : 0,
+      costPrice: 0,
       retailPrice: 0,
-      accessories: "",
-      imagesArray:[],
-      dtCreated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
-      dtUpdated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      accessories: '',
+      imagesArray: ['123123'],
+      dtCreated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      dtUpdated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
     };
+
+    this.imageSource = [];
+
+    console.log(this.vehicle + 'bbbb');
   }
 
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string, button: string): void {
+  openDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string,
+    button: string
+  ): void {
     if (button == 'view') {
       const dialogRef = this.dialog.open(DialogViewDialog, {
         width: '500px',
         maxWidth: '100vw',
         enterAnimationDuration,
         exitAnimationDuration,
-        data: this.vehicle
+        data: this.vehicle,
       });
-      dialogRef.afterClosed().subscribe(result => {
-
-      });
+      dialogRef.afterClosed().subscribe((result) => {});
     } else if (button == 'edit') {
       const dialogRef = this.dialog.open(DialogEditDialog, {
         width: '500px',
@@ -55,10 +82,10 @@ export class StockComponent {
         maxHeight: '800px',
         enterAnimationDuration,
         exitAnimationDuration,
-        data: this.vehicle
+        data: this.vehicle,
       });
-      dialogRef.afterClosed().subscribe(result => {
-        if(result && result !='cancel'){
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result && result != 'cancel') {
           this.vehicle = result;
         }
       });
@@ -67,14 +94,12 @@ export class StockComponent {
         width: '400px',
         enterAnimationDuration,
         exitAnimationDuration,
-        data: this.vehicle
+        data: this.vehicle,
       });
-      dialogRef.afterClosed().subscribe(result => {
-        if(result == 'delete')
-          this.onRemoveStock.emit(this.vehicle.id);
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result == 'delete') this.onRemoveStock.emit(this.vehicle.id);
       });
     }
-
   }
 }
 
@@ -85,8 +110,11 @@ export class StockComponent {
   imports: [MatDialogModule, MatButtonModule],
 })
 export class DialogDeleteDialog {
-  constructor(public dialogRef: MatDialogRef<DialogDeleteDialog>, @Inject(MAT_DIALOG_DATA) public data: any,) {}
-  deleteStock(){
+  constructor(
+    public dialogRef: MatDialogRef<DialogDeleteDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+  deleteStock() {
     this.dialogRef.close('delete');
   }
 }
@@ -97,12 +125,18 @@ export class DialogView {}
   templateUrl: './buttons/view-stock.html',
   styleUrls: ['./stock.component.css'],
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, NgForOf],
+  imports: [MatDialogModule, MatButtonModule, NgForOf, CommonModule],
 })
-export class DialogViewDialog {
+export class DialogViewDialog implements AfterViewInit {
+  @ViewChild('carouselExample', { static: true })
+  carouselExample!: ElementRef;
   vehicle: Vehicle;
   Accessories: Accessory[];
-  constructor(public dialogRef: MatDialogRef<DialogViewDialog>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  currentSlideIndex = 0;
+  constructor(
+    public dialogRef: MatDialogRef<DialogViewDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.vehicle = {
       manufacturer: '',
       colour: '',
@@ -111,31 +145,58 @@ export class DialogViewDialog {
       modelYear: 0,
       registrationNumber: '',
       vin: '',
-      costPrice : 0,
+      costPrice: 0,
       retailPrice: 0,
-      accessories: "",
-      imagesArray:[],
-      dtCreated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
-      dtUpdated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      accessories: '',
+      imagesArray: [],
+      dtCreated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      dtUpdated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
     };
 
     this.Accessories = [];
   }
+  ngAfterViewInit(): void {
+    if (this.carouselExample) {
+      this.carouselExample.nativeElement.carousel();
+    }
+  }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     console.log(this.data);
     this.vehicle = this.data;
 
     let accesoryString = this.vehicle.accessories.split('%/%');
-    accesoryString = accesoryString.filter(item => item !== ''); // remove null first/any entry
+    accesoryString = accesoryString.filter((item) => item !== ''); // remove null first/any entry
 
-    accesoryString.forEach(accessory => {
+    accesoryString.forEach((accessory) => {
       let newAcc = new Accessory();
       let accessoryVal = accessory.split('%-%');
       newAcc.Name = accessoryVal[0];
       newAcc.Description = accessoryVal[1];
       this.Accessories.push(newAcc);
     });
+    console.log(this.data);
+  }
+
+  prevSlide() {
+    this.currentSlideIndex =
+      (this.currentSlideIndex - 1 + this.vehicle.imagesArray.length) %
+      this.vehicle.imagesArray.length;
+    if (this.carouselExample) {
+      this.carouselExample.nativeElement.carousel('prev');
+    }
+  }
+
+  nextSlide() {
+    this.currentSlideIndex =
+      (this.currentSlideIndex + 1) % this.vehicle.imagesArray.length;
+    if (this.carouselExample) {
+      this.carouselExample.nativeElement.carousel('next');
+    }
+  }
+
+  goToSlide(index: number) {
+    this.currentSlideIndex = index;
   }
 }
 
@@ -150,14 +211,22 @@ export class DialogEdit {}
 export class DialogEditDialog {
   vehicle: Vehicle;
   Accessories: Accessory[];
-  AccessoryToAddName: string ='';
-  AccessoryToAddDesc: string ='';
+  AccessoryToAddName: string = '';
+  AccessoryToAddDesc: string = '';
   vehicleForm: FormGroup;
   @ViewChild('closeForm') closeForm: any;
   @ViewChild('fileInput') fileInput: any;
-  @ViewChild("editVehicleModal",{static:true}) editVehicleModal:ElementRef | undefined;
+  @ViewChild('editVehicleModal', { static: true }) editVehicleModal:
+    | ElementRef
+    | undefined;
 
-  constructor(public dialogRef: MatDialogRef<DialogEditDialog>, @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder, private dataService: DataService) {
+  constructor(
+    public dialogRef: MatDialogRef<DialogEditDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder,
+    private dataService: DataService,
+    private sanitizer: DomSanitizer
+  ) {
     this.vehicleForm = fb.group({});
 
     this.vehicle = {
@@ -168,12 +237,12 @@ export class DialogEditDialog {
       modelYear: 0,
       registrationNumber: '',
       vin: '',
-      costPrice : 0,
+      costPrice: 0,
       retailPrice: 0,
-      accessories: "",
-      imagesArray:[],
-      dtCreated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
-      dtUpdated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      accessories: '',
+      imagesArray: [],
+      dtCreated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      dtUpdated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
     };
 
     this.vehicleForm = this.fb.group({
@@ -184,21 +253,20 @@ export class DialogEditDialog {
       modelYear: this.fb.control(this.data.modelYear),
       registrationNumber: this.fb.control(this.data.registrationNumber),
       vin: this.fb.control(this.data.vin),
-      costPrice : this.fb.control(this.data.costPrice),
+      costPrice: this.fb.control(this.data.costPrice),
       retailPrice: this.fb.control(this.data.retailPrice),
     });
 
     this.Accessories = [];
-
   }
-  ngOnInit() : void {
+  ngOnInit(): void {
     console.log(this.data);
     this.vehicle = this.data;
 
     let accesoryString = this.vehicle.accessories.split('%/%');
-    accesoryString = accesoryString.filter(item => item !== ''); // remove null first/any entry
+    accesoryString = accesoryString.filter((item) => item !== ''); // remove null first/any entry
 
-    accesoryString.forEach(accessory => {
+    accesoryString.forEach((accessory) => {
       let newAcc = new Accessory();
       let accessoryVal = accessory.split('%-%');
       newAcc.Name = accessoryVal[0];
@@ -211,29 +279,30 @@ export class DialogEditDialog {
     let newAccesory = new Accessory();
     newAccesory.Name = this.AccessoryToAddName;
     newAccesory.Description = this.AccessoryToAddDesc;
-    this.Accessories.push(newAccesory)
+    this.Accessories.push(newAccesory);
   }
 
   removeAccessory(accName: string, accDesc: string): void {
-    console.log(accDesc, accName)
+    console.log(accDesc, accName);
     const indexToRemove = this.Accessories.findIndex(
-      item => item.Name === accName && item.Description === accDesc
+      (item) => item.Name === accName && item.Description === accDesc
     );
     this.Accessories.splice(indexToRemove, 1);
   }
 
-  accessoryToAddName(value: string){
+  accessoryToAddName(value: string) {
     this.AccessoryToAddName = value;
   }
 
-  accessoryToAddDesc(value: string){
+  accessoryToAddDesc(value: string) {
     this.AccessoryToAddDesc = value;
   }
 
   saveStock() {
-    let accesoryString ='';
-    this.Accessories.forEach(accesory => {
-      accesoryString = accesoryString + '%/%' + accesory.Name + '%-%' + accesory.Description;
+    let accesoryString = '';
+    this.Accessories.forEach((accesory) => {
+      accesoryString =
+        accesoryString + '%/%' + accesory.Name + '%-%' + accesory.Description;
     });
     let vehicle: Vehicle = {
       id: this.data.id,
@@ -247,12 +316,12 @@ export class DialogEditDialog {
       costPrice: this.CostPrice.value,
       retailPrice: this.RetailPrice.value,
       accessories: accesoryString,
-      imagesArray:[],
-      dtCreated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
-      dtUpdated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      imagesArray: [],
+      dtCreated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      dtUpdated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
     };
 
-    this.fileInput.nativeElement.files
+    this.fileInput.nativeElement.files;
     this.dataService.updateVehicle(vehicle).subscribe((res) => {
       //this.clearForm();
       this.dialogRef.close(vehicle);
@@ -287,7 +356,7 @@ export class DialogEditDialog {
     return this.vehicleForm.get('retailPrice') as FormControl;
   }
 
-  closeModal(){
+  closeModal() {
     this.dialogRef.close('cancel');
   }
 }

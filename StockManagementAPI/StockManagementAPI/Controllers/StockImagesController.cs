@@ -68,6 +68,53 @@ namespace StockManagementAPI.Controllers
       return Ok(await _context.StockImages.ToListAsync());
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> updateStockImages(List<IFormFile> images, int id)
+    {
+      if (images == null || images.Count == 0)
+        return BadRequest("No image files provided.");
+
+      if (id <= 0)
+        return BadRequest("Invalid ID value.");
+
+
+      var stockImagesToUpdate = await _context.StockImages
+          .Where(s => s.StockId == id)
+          .ToListAsync();
+
+      if (stockImagesToUpdate == null || stockImagesToUpdate.Count == 0)
+        return Ok(await _context.StockImages.ToListAsync());
+
+      _context.StockImages.RemoveRange(stockImagesToUpdate);
+      await _context.SaveChangesAsync();
+
+      foreach (var image in images)
+      {
+        if (image == null || image.Length == 0)
+          continue;
+
+        // Read the image data into a byte array
+        using (var memoryStream = new MemoryStream())
+        {
+          await image.CopyToAsync(memoryStream);
+          byte[] imageBytes = memoryStream.ToArray();
+
+          // Create a new StockImages object
+          var stockImage = new StockImages
+          {
+            StockId = id,
+            Image = imageBytes
+          };
+
+          // Add the stockImage to the context and save changes
+          _context.StockImages.Add(stockImage);
+          await _context.SaveChangesAsync();
+        }
+      }
+
+      return Ok(await _context.StockImages.ToListAsync());
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStockImages(int id)
     {
@@ -76,7 +123,7 @@ namespace StockManagementAPI.Controllers
           .ToListAsync();
 
       if (stockImages == null || stockImages.Count == 0)
-        return BadRequest("StockImages do not exist");
+        return Ok(await _context.StockImages.ToListAsync());
 
       _context.StockImages.RemoveRange(stockImages);
       await _context.SaveChangesAsync();

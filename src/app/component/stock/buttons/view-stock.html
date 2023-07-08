@@ -2,9 +2,32 @@
   <div class="container-fluid g-0 p-2">
     <div class="row g-0 d-flex justify-content-center align-items-center">
 
-      <div class="col-md-2">
-        <img src="../../../assets/google_icon.png" alt="Profile Image" class="profileView">
+      <div class="carousel-container">
+        <div id="carouselExample" class="carousel slide normal-slide-transition">
+          <div class="carousel-indicators">
+            <button type="button" *ngFor="let image of vehicle.imagesArray; let i = index"
+              [class.active]="i === currentSlideIndex" (click)="goToSlide(i)" [attr.data-bs-target]="'#carouselExample'"
+              [attr.data-bs-slide-to]="i" [attr.aria-label]="'Slide ' + (i + 1)">
+            </button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item" *ngFor="let image of vehicle.imagesArray; let i = index"
+              [ngClass]="{'active': i === currentSlideIndex}">
+              <img class="stockImageCorousel" [src]="'data:image/png;base64,' + image" alt="Vehicle Image">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="javascript:void(0)" role="button" data-slide="prev"
+            (click)="prevSlide()">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </a>
+          <a class="carousel-control-next" href="javascript:void(0)" role="button" data-slide="next"
+            (click)="nextSlide()">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </a>
+        </div>
       </div>
+
+
 
       <div class="row g-0">
 

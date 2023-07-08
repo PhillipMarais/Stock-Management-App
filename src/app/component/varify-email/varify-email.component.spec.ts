@@ -8,7 +8,7 @@ describe('VarifyEmailComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [VarifyEmailComponent]
+      declarations: [VarifyEmailComponent],
     });
     fixture = TestBed.createComponent(VarifyEmailComponent);
     component = fixture.componentInstance;

@@ -1,12 +1,11 @@
-
 main {
-width: 90%;
-margin: 3rem auto 0px
+  width: 90%;
+  margin: 3rem auto 0px;
 }
 
 app-stock {
   display: block;
-  width: 75%;
+  width: 85%;
   margin: 0px auto;
   border-radius: 1rem;
   box-shadow: 0px 0px 5px rgba(34, 34, 34, 0.5);
@@ -15,13 +14,13 @@ app-stock {
 .toolbar {
   height: 4rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 2rem;
 }
 
-.add-stock {
-  width: 20%;
+.search-bar {
+  width: 70%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,7 +32,6 @@ app-stock {
   border-radius: 1rem;
   box-shadow: 0px 0px 10px rgba(34, 34, 34, 0.5);
 }
-
 
 .search-stock input {
   margin-top: -2px;
@@ -47,8 +45,10 @@ app-stock {
   border: 1px solid black;
 }
 
-
-.ModalInput{
+.ModalInput {
   margin-bottom: 20px;
 }
 
+.addStockButton {
+  margin-bottom: 10px;
+}

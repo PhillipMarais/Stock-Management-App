@@ -3,15 +3,15 @@
   <main>
     <div class="toolbar">
       <!--Add Stock-->
-      <div class="add-stock">
-        <button type="button" class="btn btn-outline-success btn-btn-lg" data-bs-toggle="modal"
-          data-bs-target="#addVehicleModal">Add Stock</button>
+      <div class="search-bar">
+        <input class="form-control search-stock" type="text" name="model" [(ngModel)]="manufacturerFilter"
+          (ngModelChange)="SearchManufacturer()" placeholder="Stock Model Manufacturer">
       </div>
     </div>
 
-    <nav class="navbar">
-      <input class="form-control" type="text" name="model" [(ngModel)]="manufacturerFilter"
-        (ngModelChange)="SearchManufacturer()" placeholder="Stock Model Manufacturer">
+    <nav>
+      <button type="button" class="btn addStockButton btn-outline-success btn-btn-lg" data-bs-toggle="modal"
+        data-bs-target="#addVehicleModal"><i class="fa fa-plus" aria-hidden="true"></i></button>
     </nav>
 
     <!--Stock-->
@@ -170,7 +170,8 @@
             </thead>
             <div class="row mt-3">
               <div class="col">
-                <input multiple type="file" class="form-control" id="vehicleImages" #fileInput>
+                <input multiple type="file" class="form-control" id="vehicleImages" #fileInput
+                  (change)="onFileChange(fileInput)">
               </div>
             </div>
           </table>
@@ -180,6 +181,19 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closeForm>Cancel</button>
         <button type="button" class="btn btn-primary" (click)="addStock()">Add Vehicle</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!--Toast-->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto" id="toastHeading"></strong>
+      <small>Just now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="toastBody">
     </div>
   </div>
 </div>

@@ -16,20 +16,18 @@ import { ForgotPasswordComponent } from './component/forgot-password/forgot-pass
 import { HeaderComponent } from './component/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { StockComponent } from './component/stock/stock.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ViewStockComponent } from './component/view-stock/view-stock.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { OrderModule } from 'ngx-order-pipe';
-import { Ng2OrderModule } from 'ng2-order-pipe';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -64,6 +62,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     MatButtonModule,
     MatDialogModule,
     NgxPaginationModule,
+    ToastrModule.forRoot(),
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent],

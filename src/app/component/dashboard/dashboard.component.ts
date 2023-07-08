@@ -4,14 +4,15 @@ import { DataService } from 'src/app/shared/data.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe, formatDate } from '@angular/common';
 import { Accessory } from 'src/app/model/accessory';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
-
 export class DashboardComponent {
   @ViewChild('fileInput') fileInput: any;
   @ViewChild('closeForm') closeForm: any;
@@ -20,11 +21,11 @@ export class DashboardComponent {
   vehicleForm: FormGroup;
   vehiclesToDisplay: Vehicle[] = [];
   newDate: Date = new Date();
-  reverse:boolean = false;
-  imageSource: SafeResourceUrl;
+  reverse: boolean = false;
+
   Accessories: Accessory[];
-  AccessoryToAddName: string ='';
-  AccessoryToAddDesc: string ='';
+  AccessoryToAddName: string = '';
+  AccessoryToAddDesc: string = '';
 
   manufacturerFilter: any;
 
@@ -33,21 +34,39 @@ export class DashboardComponent {
   tablesizes: any = [5, 10, 15, 20];
   count: number = 0;
 
-
-  constructor(private sanitizer: DomSanitizer, private datePipe: DatePipe, private dataService: DataService, private fb: FormBuilder){
+  constructor(
+    private toastr: ToastrService,
+    private sanitizer: DomSanitizer,
+    private datePipe: DatePipe,
+    private dataService: DataService,
+    private fb: FormBuilder
+  ) {
     this.vehicleForm = fb.group({});
     this.Accessories = [];
-    this.imageSource = [];
   }
 
   //gets and sets data for stock
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.dataService.getVehicles().subscribe((res: Vehicle[]) => {
       this.vehiclesToDisplay = this.vehicles = res;
       console.log(this.vehicles);
-      this.dataService.getStockImages().subscribe((res) => {
-      this.imageSource = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + res[2].image);
-      });
+      this.dataService
+        .getStockImages()
+        .subscribe((res: { id: number; stockId: number; image: string }[]) => {
+          for (const vehicle of this.vehicles) {
+            const matchingImages = res.filter(
+              (image) => image.stockId === vehicle.id
+            );
+            for (const image of matchingImages) {
+              if (vehicle.imagesArray) {
+                vehicle.imagesArray.push(image.image);
+              } else {
+                vehicle.imagesArray = [image.image];
+              }
+            }
+          }
+          console.log(this.vehicles);
+        });
     });
 
     this.vehicleForm = this.fb.group({
@@ -58,7 +77,7 @@ export class DashboardComponent {
       modelYear: this.fb.control(''),
       registrationNumber: this.fb.control(''),
       vin: this.fb.control(''),
-      costPrice : this.fb.control(''),
+      costPrice: this.fb.control(''),
       retailPrice: this.fb.control(''),
     });
   }
@@ -76,36 +95,41 @@ export class DashboardComponent {
   }
 
   //------------Sorting------------
-  sort (key: string) {
-    if(this.reverse){
-      this.vehiclesToDisplay.sort((a,b) => b.manufacturer.localeCompare(a.manufacturer));
+  sort(key: string) {
+    if (this.reverse) {
+      this.vehiclesToDisplay.sort((a, b) =>
+        b.manufacturer.localeCompare(a.manufacturer)
+      );
     } else
-    this.vehiclesToDisplay.sort((a,b) => a.manufacturer.localeCompare(b.manufacturer));
+      this.vehiclesToDisplay.sort((a, b) =>
+        a.manufacturer.localeCompare(b.manufacturer)
+      );
     this.reverse = !this.reverse;
   }
 
   //------------Filters------------
   SearchManufacturer() {
-    if(this.manufacturerFilter == ""){
+    if (this.manufacturerFilter == '') {
       this.ngOnInit();
       this.applyOtherFilters();
     } else {
-      this.vehiclesToDisplay = this.vehicles.filter(res => {
-        return res.manufacturer.toLowerCase().match(this.manufacturerFilter.toLowerCase());
+      this.vehiclesToDisplay = this.vehicles.filter((res) => {
+        return res.manufacturer
+          .toLowerCase()
+          .match(this.manufacturerFilter.toLowerCase());
       });
     }
   }
 
-  applyOtherFilters() {
-
-  }
+  applyOtherFilters() {}
 
   //------------Buttons------------
   addStock() {
-    let accesoryString ='';
+    let accesoryString = '';
     const files: FileList = this.fileInput.nativeElement.files;
-    this.Accessories.forEach(accesory => {
-      accesoryString = accesoryString + '%/%' + accesory.Name + '%-%' + accesory.Description;
+    this.Accessories.forEach((accesory) => {
+      accesoryString =
+        accesoryString + '%/%' + accesory.Name + '%-%' + accesory.Description;
     });
     let vehicle: Vehicle = {
       manufacturer: this.Manufacturer.value,
@@ -118,37 +142,41 @@ export class DashboardComponent {
       costPrice: this.CostPrice.value,
       retailPrice: this.RetailPrice.value,
       accessories: accesoryString,
-      imagesArray:[],
-      dtCreated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
-      dtUpdated : formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      imagesArray: [],
+      dtCreated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
+      dtUpdated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
     };
 
-    this.dataService.createVehicle(vehicle).subscribe((res) => {
-      let id = (Number)(res[res.length - 1].id);
-      if(files.length > 0){
-        this.dataService.createStockImage(files, id).subscribe(
-        response => {
-        alert("new stock added");
-        console.log('File uploaded successfully');
-        this.vehicles = response;
-        this.clearForm();
-        this.closeForm.nativeElement.click();
-        this.ngOnInit();
+    this.dataService.createVehicle(vehicle).subscribe(
+      (res) => {
+        let id = Number(res[res.length - 1].id);
+        if (files.length > 0) {
+          this.dataService.createStockImage(files, id).subscribe(
+            (response) => {
+              alert('new stock added');
+              console.log('File uploaded successfully');
+              this.vehicles = response;
+              this.clearForm();
+              this.closeForm.nativeElement.click();
+              this.ngOnInit();
+            },
+            (error) => {
+              console.error('Error uploading file:', error);
+            }
+          );
+        }
       },
-      error => {
-        console.error('Error uploading file:', error);
-      });
-      }
-    },error => {
+      (error) => {
         alert('Error Adding Vehicle:' + error);
-    });
+      }
+    );
   }
 
-  accessoryToAddName(value: string){
+  accessoryToAddName(value: string) {
     this.AccessoryToAddName = value;
   }
 
-  accessoryToAddDesc(value: string){
+  accessoryToAddDesc(value: string) {
     this.AccessoryToAddDesc = value;
   }
 
@@ -156,24 +184,50 @@ export class DashboardComponent {
     let newAccesory = new Accessory();
     newAccesory.Name = this.AccessoryToAddName;
     newAccesory.Description = this.AccessoryToAddDesc;
-    this.Accessories.push(newAccesory)
+    this.Accessories.push(newAccesory);
   }
 
   removeAccessory(accName: string, accDesc: string): void {
-    console.log(accDesc, accName)
+    console.log(accDesc, accName);
     const indexToRemove = this.Accessories.findIndex(
-      item => item.Name === accName && item.Description === accDesc
+      (item) => item.Name === accName && item.Description === accDesc
     );
     this.Accessories.splice(indexToRemove, 1);
   }
 
   removeStock(event: any) {
+    var hasImage = false;
     this.dataService.deleteVehicle(event).subscribe((res) => {
       this.dataService.deleteStockImage(event).subscribe((res) => {
         this.vehicles = res;
         this.ngOnInit();
       });
     });
+  }
+
+  onFileChange(fileInput: HTMLInputElement) {
+    const files = fileInput.files;
+    if (files && files.length > 3) {
+      fileInput.value = '';
+      this.showCustomToast(
+        'Warning',
+        'You can only select up to three images to upload.'
+      );
+      return;
+    }
+  }
+
+  showCustomToast(heading: string, message: string) {
+    const toastElement = document.getElementById('liveToast');
+    const toastHeadingElement = document.getElementById('toastHeading');
+    const toastBodyElement = document.getElementById('toastBody');
+
+    if (toastElement && toastBodyElement && toastHeadingElement) {
+      toastHeadingElement.textContent = heading;
+      toastBodyElement.textContent = message;
+      const toast = new bootstrap.Toast(toastElement);
+      toast.show();
+    }
   }
 
   clearForm() {
