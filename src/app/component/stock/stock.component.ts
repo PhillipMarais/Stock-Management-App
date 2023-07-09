@@ -28,7 +28,7 @@ import {
 import { DataService } from 'src/app/shared/data.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
+import * as bootstrap from 'bootstrap';
 @Component({
   selector: 'app-stock',
   templateUrl: './stock.component.html',
@@ -86,7 +86,16 @@ export class StockComponent {
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result && result != 'cancel') {
-          this.vehicle = result;
+          if (result.imagesArray.length > 0) {
+            this.vehicle = result;
+          } else {
+            result.imagesArray = this.vehicle.imagesArray;
+            this.vehicle = result;
+          }
+          this.showCustomToast(
+            'Stock updated',
+            'Stock has been updated successfully.'
+          );
         }
       });
     } else {
@@ -97,8 +106,27 @@ export class StockComponent {
         data: this.vehicle,
       });
       dialogRef.afterClosed().subscribe((result) => {
-        if (result == 'delete') this.onRemoveStock.emit(this.vehicle.id);
+        if (result == 'delete') {
+          this.onRemoveStock.emit(this.vehicle.id);
+          this.showCustomToast(
+            'Stock deleted',
+            'Stock has successfully been deleted.'
+          );
+        }
       });
+    }
+  }
+
+  showCustomToast(heading: string, message: string) {
+    const toastElement = document.getElementById('liveToast');
+    const toastHeadingElement = document.getElementById('toastHeading');
+    const toastBodyElement = document.getElementById('toastBody');
+
+    if (toastElement && toastBodyElement && toastHeadingElement) {
+      toastHeadingElement.textContent = heading;
+      toastBodyElement.textContent = message;
+      const toast = new bootstrap.Toast(toastElement);
+      toast.show();
     }
   }
 }
@@ -298,6 +326,31 @@ export class DialogEditDialog {
     this.AccessoryToAddDesc = value;
   }
 
+  onFileChange(fileInput: HTMLInputElement) {
+    const files = fileInput.files;
+    if (files && files.length > 3) {
+      fileInput.value = '';
+      this.showCustomToast(
+        'Warning',
+        'You can only select up to three images to upload.'
+      );
+      return;
+    }
+  }
+
+  showCustomToast(heading: string, message: string) {
+    const toastElement = document.getElementById('liveToast');
+    const toastHeadingElement = document.getElementById('toastHeading');
+    const toastBodyElement = document.getElementById('toastBody');
+
+    if (toastElement && toastBodyElement && toastHeadingElement) {
+      toastHeadingElement.textContent = heading;
+      toastBodyElement.textContent = message;
+      const toast = new bootstrap.Toast(toastElement);
+      toast.show();
+    }
+  }
+
   saveStock() {
     let accesoryString = '';
     this.Accessories.forEach((accesory) => {
@@ -320,11 +373,27 @@ export class DialogEditDialog {
       dtCreated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
       dtUpdated: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
     };
-
-    this.fileInput.nativeElement.files;
+    const files: FileList = this.fileInput.nativeElement.files;
     this.dataService.updateVehicle(vehicle).subscribe((res) => {
       //this.clearForm();
-      this.dialogRef.close(vehicle);
+      if (files.length > 0) {
+        this.dataService.updateStockImage(files, this.data.id).subscribe(
+          (response: { id: number; stockId: number; image: string }[]) => {
+            console.log('File uploaded successfully');
+            if (response) {
+              response.forEach((x) => {
+                vehicle.imagesArray.push(x.image);
+              });
+            }
+            this.dialogRef.close(vehicle);
+          },
+          (error) => {
+            console.error('Error uploading file:', error);
+          }
+        );
+      } else {
+        this.dialogRef.close(vehicle);
+      }
     });
   }
 

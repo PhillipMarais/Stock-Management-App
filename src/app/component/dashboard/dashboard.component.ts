@@ -27,7 +27,7 @@ export class DashboardComponent {
   AccessoryToAddName: string = '';
   AccessoryToAddDesc: string = '';
 
-  manufacturerFilter: any;
+  stockDetailsFilter: any;
 
   page: number = 1;
   tableSize: number = 3;
@@ -108,15 +108,23 @@ export class DashboardComponent {
   }
 
   //------------Filters------------
-  SearchManufacturer() {
-    if (this.manufacturerFilter == '') {
+  SearchDetais() {
+    if (this.stockDetailsFilter == '') {
       this.ngOnInit();
       this.applyOtherFilters();
     } else {
       this.vehiclesToDisplay = this.vehicles.filter((res) => {
-        return res.manufacturer
+        const manufacturerMatch = res.manufacturer
           .toLowerCase()
-          .match(this.manufacturerFilter.toLowerCase());
+          .includes(this.stockDetailsFilter.toLowerCase());
+        const modelYearMatch = res.modelYear
+          .toString()
+          .includes(this.stockDetailsFilter);
+        const kilometeresMatch = res.kilometreReading
+          .toString()
+          .includes(this.stockDetailsFilter);
+
+        return manufacturerMatch || modelYearMatch || kilometeresMatch;
       });
     }
   }
@@ -153,12 +161,14 @@ export class DashboardComponent {
         if (files.length > 0) {
           this.dataService.createStockImage(files, id).subscribe(
             (response) => {
-              alert('new stock added');
-              console.log('File uploaded successfully');
               this.vehicles = response;
               this.clearForm();
               this.closeForm.nativeElement.click();
               this.ngOnInit();
+              this.showCustomToast(
+                'Stock added',
+                'New stock has been successfully added.'
+              );
             },
             (error) => {
               console.error('Error uploading file:', error);
@@ -167,7 +177,7 @@ export class DashboardComponent {
         }
       },
       (error) => {
-        alert('Error Adding Vehicle:' + error);
+        console.error('Error uploading file:', error);
       }
     );
   }

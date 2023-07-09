@@ -97,7 +97,7 @@
               <div class="list-group">
                 <a class="list-group-item list-group-item-action">
                   <div class="d-flex w-100 justify-content-between">
-                    <h2 class="form-control mb-1">{{accessory.Name}}</h2>
+                    <h3 class="form-control mb-1">{{accessory.Name}}</h3>
                   </div>
                   <p style="overflow: auto;" class="form-control mb-1">{{accessory.Description}}</p>
                   <div style="text-align: end;">
@@ -118,7 +118,8 @@
             </thead>
             <div class="row mt-3">
               <div class="col">
-                <input multiple type="file" class="form-control" id="vehicleImages" #fileInput>
+                <input multiple type="file" class="form-control" id="vehicleImages" #fileInput
+                  (change)="onFileChange(fileInput)">
               </div>
             </div>
           </table>

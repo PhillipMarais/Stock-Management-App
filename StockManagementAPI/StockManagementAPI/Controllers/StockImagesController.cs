@@ -112,7 +112,15 @@ namespace StockManagementAPI.Controllers
         }
       }
 
-      return Ok(await _context.StockImages.ToListAsync());
+      var stockImages = await _context.StockImages.ToListAsync();
+
+      var stockImagesDto = stockImages.Where(s => s.StockId == id).Select(s => new stockImagesDto {
+          Id = s.Id,
+          StockId = s.StockId,
+          Image = Convert.ToBase64String(s.Image)
+      }).ToList();
+
+      return Ok(stockImagesDto);
     }
 
     [HttpDelete("{id}")]

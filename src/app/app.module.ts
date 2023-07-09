@@ -28,6 +28,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ViewStockComponent } from './component/view-stock/view-stock.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastrModule } from 'ngx-toastr';
+import { FooterComponent } from './component/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ToastrModule } from 'ngx-toastr';
     HeaderComponent,
     StockComponent,
     ViewStockComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

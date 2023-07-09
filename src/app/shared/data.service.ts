@@ -39,6 +39,17 @@ export class DataService {
     return this.http.get(`${environment.apiUrl}/StockImages`);
   }
 
+  public updateStockImage(files: FileList, id: number): Observable<any> {
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('images', files[i]);
+    }
+    return this.http.put<any>(
+      `${environment.apiUrl}/StockImages/${id}`,
+      formData
+    );
+  }
+
   public createStockImage(files: FileList, id: number): Observable<any> {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {

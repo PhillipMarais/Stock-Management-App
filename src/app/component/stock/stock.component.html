@@ -1,5 +1,5 @@
 <div class="container-fluid g-0 p-2" style="
-    background: whitesmoke;">
+    background: whitesmoke; min-height: 80vh;">
   <div class="row g-0">
 
     <div class="col-md-4 stockImageContainer">
@@ -12,7 +12,7 @@
       <div class="row g-0" style="justify-content: center;">
 
         <div class="col-md-10 bg-dark stockHeader">
-          <span class="manufacturer">{{vehicle.manufacturer}}</span>
+          <span class="modelHeading">{{vehicle.modelDescription}}</span>
         </div>
 
 
@@ -33,8 +33,8 @@
             </thead>
             <tbody>
               <tr>
-                <td>Model</td>
-                <td>{{vehicle.modelDescription}}</td>
+                <td>Manufacturer</td>
+                <td>{{vehicle.manufacturer}}</td>
               </tr>
               <tr>
                 <td>Model Year</td>
@@ -72,14 +72,29 @@
           </table>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end" role="group" style="padding-bottom: 10px;">
             <button mat-raised-button style="color: #f0fff3; background-color: #4bc0c4;"
-              (click)="openDialog('0ms', '0ms', 'view')">Details</button>
+              (click)="openDialog('0ms', '0ms', 'view')">Details <i class="fa fa-bars" aria-hidden="true"></i></button>
             <button mat-raised-button style="color: #f0fff3; background-color: #4baf53;"
-              (click)="openDialog('0ms', '0ms', 'edit')">Edit</button>
+              (click)="openDialog('0ms', '0ms', 'edit')">Edit <i class="fa fa-pencil-square"
+                aria-hidden="true"></i></button>
             <button mat-raised-button style="color: #f0fff3; background-color: #ca1313; margin-right: 5%;"
-              (click)="openDialog('0ms', '0ms', 'delete')">Delete</button>
+              (click)="openDialog('0ms', '0ms', 'delete')">Delete <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!--Toast-->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto" id="toastHeading"></strong>
+      <small>Just now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="toastBody">
     </div>
   </div>
 </div>

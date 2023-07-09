@@ -4,15 +4,13 @@
     <div class="toolbar">
       <!--Add Stock-->
       <div class="search-bar">
-        <input class="form-control search-stock" type="text" name="model" [(ngModel)]="manufacturerFilter"
-          (ngModelChange)="SearchManufacturer()" placeholder="Stock Model Manufacturer">
+        <input class="form-control search-stock" type="text" name="model" [(ngModel)]="stockDetailsFilter"
+          (ngModelChange)="SearchDetais()" placeholder="Search Stock Details">
+        <button type="button" class="btn addStockButton btn-outline-success btn-btn-lg" data-bs-toggle="modal"
+          data-bs-target="#addVehicleModal"><i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
-    </div>
 
-    <nav>
-      <button type="button" class="btn addStockButton btn-outline-success btn-btn-lg" data-bs-toggle="modal"
-        data-bs-target="#addVehicleModal"><i class="fa fa-plus" aria-hidden="true"></i></button>
-    </nav>
+    </div>
 
     <!--Stock-->
     <div class="Stock black-border">
@@ -21,8 +19,10 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th (click)="sort('manufacturer')">Manufacturer&nbsp;<i class="fa fa-sort"></i></th>
-              <th>Model</th>
+              <th>Manufacturer&nbsp;<i (click)="sort('manufacturer')" class="fa fa-sort pointer"></i></th>
+              <th>Model&nbsp;<i (click)="sort('manufacturer')" class="fa fa-sort pointer"></i></th>
+              <th>Cost Price&nbsp;<i (click)="sort('manufacturer')" class="fa fa-sort pointer"></i></th>
+              <th>Retail Price&nbsp;<i (click)="sort('manufacturer')" class="fa fa-sort pointer"></i></th>
             </tr>
           </thead>
         </table>

@@ -55,6 +55,7 @@ namespace StockManagementAPI.Controllers
       dbVehicle.ModelDescription = vehicle.ModelDescription;
       dbVehicle.ModelYear = vehicle.ModelYear;
       dbVehicle.KilometreReading = vehicle.KilometreReading;
+      dbVehicle.Accessories = vehicle.Accessories;
       dbVehicle.Colour = vehicle.Colour;
       dbVehicle.VIN = vehicle.VIN;
       dbVehicle.RetailPrice = vehicle.RetailPrice;
