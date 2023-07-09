@@ -96,15 +96,41 @@ export class DashboardComponent {
 
   //------------Sorting------------
   sort(key: string) {
-    if (this.reverse) {
-      this.vehiclesToDisplay.sort((a, b) =>
-        b.manufacturer.localeCompare(a.manufacturer)
-      );
-    } else
-      this.vehiclesToDisplay.sort((a, b) =>
-        a.manufacturer.localeCompare(b.manufacturer)
-      );
-    this.reverse = !this.reverse;
+    if (key == 'manufacturer') {
+      if (this.reverse) {
+        this.vehiclesToDisplay.sort((a, b) =>
+          b.manufacturer.localeCompare(a.manufacturer)
+        );
+      } else
+        this.vehiclesToDisplay.sort((a, b) =>
+          a.manufacturer.localeCompare(b.manufacturer)
+        );
+      this.reverse = !this.reverse;
+    } else if (key == 'model') {
+      if (this.reverse) {
+        this.vehiclesToDisplay.sort((a, b) =>
+          b.modelDescription.localeCompare(a.modelDescription)
+        );
+      } else
+        this.vehiclesToDisplay.sort((a, b) =>
+          a.modelDescription.localeCompare(b.modelDescription)
+        );
+      this.reverse = !this.reverse;
+    } else if (key == 'costPrice') {
+      if (this.reverse) {
+        this.vehiclesToDisplay.sort((a, b) => b.costPrice - a.costPrice);
+      } else {
+        this.vehiclesToDisplay.sort((a, b) => a.costPrice - b.costPrice);
+      }
+      this.reverse = !this.reverse;
+    } else {
+      if (this.reverse) {
+        this.vehiclesToDisplay.sort((a, b) => b.retailPrice - a.retailPrice);
+      } else {
+        this.vehiclesToDisplay.sort((a, b) => a.retailPrice - b.retailPrice);
+      }
+      this.reverse = !this.reverse;
+    }
   }
 
   //------------Filters------------

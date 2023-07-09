@@ -11,7 +11,10 @@
       </div>
 
     </div>
-
+    <div>
+      <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+      </pagination-controls>
+    </div>
     <!--Stock-->
     <div class="Stock black-border">
       <div class="vehicles ">
@@ -20,17 +23,12 @@
           <thead>
             <tr>
               <th>Manufacturer&nbsp;<i (click)="sort('manufacturer')" class="fa fa-sort pointer"></i></th>
-              <th>Model&nbsp;<i (click)="sort('manufacturer')" class="fa fa-sort pointer"></i></th>
-              <th>Cost Price&nbsp;<i (click)="sort('manufacturer')" class="fa fa-sort pointer"></i></th>
-              <th>Retail Price&nbsp;<i (click)="sort('manufacturer')" class="fa fa-sort pointer"></i></th>
+              <th>Model&nbsp;<i (click)="sort('model')" class="fa fa-sort pointer"></i></th>
+              <th>Cost Price&nbsp;<i (click)="sort('costPrice')" class="fa fa-sort pointer"></i></th>
+              <th>Retail Price&nbsp;<i (click)="sort('retailPrice')" class="fa fa-sort pointer"></i></th>
             </tr>
           </thead>
         </table>
-
-        <div>
-          <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
-          </pagination-controls>
-        </div>
 
         <div class="row mt-4" *ngFor="let vehicle of vehiclesToDisplay | paginate:{
           itemsPerPage: tableSize,

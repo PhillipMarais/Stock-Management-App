@@ -64,3 +64,7 @@ h1 {
   background: whitesmoke;
   text-decoration: underline;
 }
+
+.pointer {
+  cursor: pointer;
+}
