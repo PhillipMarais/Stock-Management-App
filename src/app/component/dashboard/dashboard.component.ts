@@ -34,22 +34,14 @@ export class DashboardComponent {
   tablesizes: any = [5, 10, 15, 20];
   count: number = 0;
 
-  constructor(
-    private toastr: ToastrService,
-    private sanitizer: DomSanitizer,
-    private datePipe: DatePipe,
-    private dataService: DataService,
-    private fb: FormBuilder
-  ) {
+  constructor(private dataService: DataService, private fb: FormBuilder) {
     this.vehicleForm = fb.group({});
     this.Accessories = [];
   }
 
-  //gets and sets data for stock
   ngOnInit(): void {
     this.dataService.getVehicles().subscribe((res: Vehicle[]) => {
       this.vehiclesToDisplay = this.vehicles = res;
-      console.log(this.vehicles);
       this.dataService
         .getStockImages()
         .subscribe((res: { id: number; stockId: number; image: string }[]) => {
@@ -65,7 +57,6 @@ export class DashboardComponent {
               }
             }
           }
-          console.log(this.vehicles);
         });
     });
 
@@ -82,7 +73,7 @@ export class DashboardComponent {
     });
   }
 
-  //------------Pagination------------
+  //------------PAGINTATION------------
   onTableDataChange(event: any) {
     this.page = event;
     this.ngOnInit();
@@ -94,7 +85,11 @@ export class DashboardComponent {
     this.ngOnInit();
   }
 
-  //------------Sorting------------
+  //------------SORTING------------
+
+  /*
+  Sorts the vehicle list we display depending on which sorted button was selected
+  */
   sort(key: string) {
     if (key == 'manufacturer') {
       if (this.reverse) {
@@ -133,7 +128,7 @@ export class DashboardComponent {
     }
   }
 
-  //------------Filters------------
+  //------------FILTER------------
   SearchDetais() {
     if (this.stockDetailsFilter == '') {
       this.ngOnInit();
@@ -157,7 +152,7 @@ export class DashboardComponent {
 
   applyOtherFilters() {}
 
-  //------------Buttons------------
+  //------------ADDING A STOCK------------
   addStock() {
     let accesoryString = '';
     const files: FileList = this.fileInput.nativeElement.files;
@@ -224,7 +219,6 @@ export class DashboardComponent {
   }
 
   removeAccessory(accName: string, accDesc: string): void {
-    console.log(accDesc, accName);
     const indexToRemove = this.Accessories.findIndex(
       (item) => item.Name === accName && item.Description === accDesc
     );
@@ -253,6 +247,7 @@ export class DashboardComponent {
     }
   }
 
+  //function for creating alerts
   showCustomToast(heading: string, message: string) {
     const toastElement = document.getElementById('liveToast');
     const toastHeadingElement = document.getElementById('toastHeading');
@@ -266,6 +261,7 @@ export class DashboardComponent {
     }
   }
 
+  //clears form
   clearForm() {
     this.Manufacturer.setValue('');
     this.Colour.setValue('');
@@ -279,6 +275,7 @@ export class DashboardComponent {
     this.fileInput.nativeElement.value = '';
   }
 
+  //Function to get formcontrol value----
   public get Manufacturer(): FormControl {
     return this.vehicleForm.get('manufacturer') as FormControl;
   }

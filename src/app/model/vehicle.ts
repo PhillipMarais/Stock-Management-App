@@ -1,6 +1,3 @@
-import { Bytes } from '@angular/fire/firestore';
-import { Accessory } from './accessory';
-
 export class Vehicle {
   id?: number = 0;
   modelYear: number = 0;

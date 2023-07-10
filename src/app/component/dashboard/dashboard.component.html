@@ -116,8 +116,7 @@
             </div>
           </div>
 
-
-
+          <!--Accessories-->
           <table class="table table-hover ">
             <thead class="text-center fs-5 fst-italic text-secondary">
               <tr>
@@ -142,7 +141,6 @@
               </tr>
             </thead>
 
-
             <div class="list-group" *ngFor="let accessory of Accessories">
               <div class="list-group">
                 <a class="list-group-item list-group-item-action">
@@ -156,8 +154,6 @@
                   </div>
                 </a>
               </div>
-
-
             </div>
 
             <!--images-->
@@ -173,12 +169,15 @@
               </div>
             </div>
           </table>
+
         </form>
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closeForm>Cancel</button>
         <button type="button" class="btn btn-primary" (click)="addStock()">Add Vehicle</button>
       </div>
+
     </div>
   </div>
 </div>

@@ -11,6 +11,7 @@ export class DataService {
   private url = 'Vehicle';
   constructor(private http: HttpClient) {}
 
+  //Stock
   public getVehicles(): Observable<Vehicle[]> {
     return this.http.get<Vehicle[]>(`${environment.apiUrl}/${this.url}`);
   }
@@ -35,6 +36,7 @@ export class DataService {
     );
   }
 
+  //Images
   public getStockImages(): Observable<any> {
     return this.http.get(`${environment.apiUrl}/StockImages`);
   }

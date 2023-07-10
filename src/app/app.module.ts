@@ -25,7 +25,6 @@ import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { StockComponent } from './component/stock/stock.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ViewStockComponent } from './component/view-stock/view-stock.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastrModule } from 'ngx-toastr';
 import { FooterComponent } from './component/footer/footer.component';
@@ -40,7 +39,6 @@ import { FooterComponent } from './component/footer/footer.component';
     ForgotPasswordComponent,
     HeaderComponent,
     StockComponent,
-    ViewStockComponent,
     FooterComponent,
   ],
   imports: [

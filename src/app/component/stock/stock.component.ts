@@ -57,8 +57,6 @@ export class StockComponent {
     };
 
     this.imageSource = [];
-
-    console.log(this.vehicle + 'bbbb');
   }
 
   openDialog(
@@ -190,7 +188,6 @@ export class DialogViewDialog implements AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
     this.vehicle = this.data;
 
     let accesoryString = this.vehicle.accessories.split('%/%');
@@ -203,7 +200,6 @@ export class DialogViewDialog implements AfterViewInit {
       newAcc.Description = accessoryVal[1];
       this.Accessories.push(newAcc);
     });
-    console.log(this.data);
   }
 
   prevSlide() {
@@ -288,7 +284,6 @@ export class DialogEditDialog {
     this.Accessories = [];
   }
   ngOnInit(): void {
-    console.log(this.data);
     this.vehicle = this.data;
 
     let accesoryString = this.vehicle.accessories.split('%/%');
@@ -320,7 +315,6 @@ export class DialogEditDialog {
   }
 
   removeAccessory(accName: string, accDesc: string): void {
-    console.log(accDesc, accName);
     const indexToRemove = this.Accessories.findIndex(
       (item) => item.Name === accName && item.Description === accDesc
     );
@@ -388,7 +382,6 @@ export class DialogEditDialog {
       if (files.length > 0) {
         this.dataService.updateStockImage(files, this.data.id).subscribe(
           (response: { id: number; stockId: number; image: string }[]) => {
-            console.log('File uploaded successfully');
             if (response) {
               response.forEach((x) => {
                 vehicle.imagesArray.push(x.image);
