@@ -45,3 +45,9 @@ Thumbs.db
 .firebase
 *-debug.log
 .runtimeconfig.json
+
+# .NET / Visual Studio
+**/bin/
+**/obj/
+**/.vs/
+*.user
