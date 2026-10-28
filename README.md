@@ -1,23 +1,72 @@
-# StockManagementApp
+# Stock Management App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.1.
+A full-stack vehicle stock management app. Users sign in, browse the vehicle inventory, and add, edit or remove vehicles together with their images and accessories.
 
-## Development server
+The front end is built with **Angular** and the back end is an **ASP.NET Core Web API** with **Entity Framework Core** and **SQL Server**. Sign-in uses **Firebase Authentication**.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
 
-## Code scaffolding
+- **Accounts:** register, log in, email verification and password reset through Firebase Authentication.
+- **Stock table:** search across stock details, sort by manufacturer, model, cost price or retail price, and page through results.
+- **Vehicle records:** create, view, edit and delete vehicles with model year, description, manufacturer, colour, registration number, VIN, kilometre reading, cost price and retail price.
+- **Accessories:** add and remove named accessories with descriptions on each vehicle.
+- **Images:** upload several images per vehicle. The API stores them in SQL Server.
+- **Feedback:** toast notifications after saving or deleting stock.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Tech stack
 
-## Build
+| Layer | Technologies |
+| --- | --- |
+| Front end | Angular 16, TypeScript, Angular Material, PrimeNG, Bootstrap, ngx-pagination, ngx-toastr |
+| Back end | ASP.NET Core Web API (.NET 6), Entity Framework Core 7 (code-first migrations), Swagger |
+| Database | SQL Server |
+| Auth and hosting | Firebase Authentication, Firebase Hosting config |
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## API endpoints
 
-## Running WebAPI
+| Method | Route | Purpose |
+| --- | --- | --- |
+| GET | `/api/Vehicle` | List all vehicles |
+| POST | `/api/Vehicle` | Add a vehicle |
+| PUT | `/api/Vehicle` | Update a vehicle |
+| DELETE | `/api/Vehicle/{id}` | Delete a vehicle |
+| GET | `/api/StockImages` | List stock images |
+| POST | `/api/StockImages/{id}` | Upload images for a vehicle |
+| PUT | `/api/StockImages/{id}` | Replace a vehicle's images |
+| DELETE | `/api/StockImages/{id}` | Delete a vehicle's images |
 
-Open Visual Studio 2022 and select open project. Then navigate this folder and inside StockManagementAPI select the StockManagementAPI.sln and run the project,
+With the API running, Swagger UI lists these at `https://localhost:7199/swagger`.
 
-## Data
+## Project structure
 
-Scripts for the database can be found in dataScript folder
+```
+src/app/
+  component/       login, register, verify email, forgot password, dashboard, stock (add, view, edit, delete)
+  model/           Vehicle and Accessory models
+  shared/          DataService (API calls) and AuthService (Firebase sign-in)
+StockManagementAPI/
+  StockManagementAPI/
+    Controllers/   VehicleController, StockImagesController
+    Data/          Entity Framework DataContext
+    Migrations/    EF Core migrations
+dataScript/        SQL script for the database
+```
+
+## Running locally
+
+**You will need:** Node.js with the Angular CLI 16, the .NET 6 SDK, and SQL Server Express (or update the connection string for another SQL Server instance).
+
+1. **Database.** Either run `dataScript/data.sql` against SQL Server, or apply the migrations from the API folder:
+   ```
+   cd StockManagementAPI/StockManagementAPI
+   dotnet ef database update
+   ```
+   The default connection string in `appsettings.json` points to `localhost\sqlexpress` and a database named `stockmanagementdb`.
+2. **API.** Open `StockManagementAPI/StockManagementAPI.sln` in Visual Studio 2022 and run it, or run `dotnet run` from `StockManagementAPI/StockManagementAPI`. It listens on `https://localhost:7199`.
+3. **Front end.** From the repository root:
+   ```
+   npm install
+   ng serve
+   ```
+   Then open `http://localhost:4200`. The front end calls the API at the `apiUrl` set in `src/environments/environment.ts`.
+4. **Firebase.** Sign-in uses the Firebase project configured in `src/environments/environment.ts`. To use your own, create a Firebase project with Email/Password sign-in enabled and replace the `firebase` settings there.
