@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  margin: 0;
+  margin-right: auto;
+  font-size: 1.6rem;
+}
+
+.search {
+  flex: 1 1 18rem;
+  min-width: 0;
+  max-width: 32rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e4e7eb;
+  border-radius: 12px;
+}
+
+table {
+  width: 100%;
+  min-width: 52rem;
+}
+
+.thumb {
+  display: block;
+  width: 4.5rem;
+  height: 3rem;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.thumb.empty {
+  display: grid;
+  place-items: center;
+  color: #9aa5b1;
+  background: #f5f7fa;
+}
+
+.actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.no-data {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #616e7c;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

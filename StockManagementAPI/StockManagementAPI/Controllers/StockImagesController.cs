@@ -82,11 +82,12 @@ namespace StockManagementAPI.Controllers
           .Where(s => s.StockId == id)
           .ToListAsync();
 
-      if (stockImagesToUpdate == null || stockImagesToUpdate.Count == 0)
-        return Ok(await _context.StockImages.ToListAsync());
-
-      _context.StockImages.RemoveRange(stockImagesToUpdate);
-      await _context.SaveChangesAsync();
+      // Replace any existing images; a vehicle with none yet simply gets the new ones
+      if (stockImagesToUpdate.Count > 0)
+      {
+        _context.StockImages.RemoveRange(stockImagesToUpdate);
+        await _context.SaveChangesAsync();
+      }
 
       foreach (var image in images)
       {
