@@ -1,0 +1,43 @@
+# Builds the Angular front end and the .NET API on every push and pull request.
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api:
+    name: API (.NET 10)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: StockManagementAPI
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore
+      # Fails the build if a package with a known vulnerability creeps back in
+      - name: Check for vulnerable packages
+        run: |
+          dotnet list package --vulnerable --include-transitive | tee vulnerable.txt
+          ! grep -q '^\s*>' vulnerable.txt
+      - run: dotnet build --no-restore --configuration Release -warnaserror
+
+  web:
+    name: Front end (Angular)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx ng build

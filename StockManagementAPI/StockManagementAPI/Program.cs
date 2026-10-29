@@ -16,14 +16,8 @@ builder.Services.AddCors(options => options.AddPolicy(name: "StockManagement",
 );
 
 var app = builder.Build();
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-  app.UseSwagger();
-  app.UseSwaggerUI();
-}
 
-
+// Swagger UI is enabled in every environment so the API is easy to explore
 app.UseSwagger();
 app.UseSwaggerUI();
 

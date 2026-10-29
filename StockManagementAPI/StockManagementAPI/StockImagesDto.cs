@@ -6,6 +6,6 @@ namespace StockManagementAPI
 
     public int StockId { get; set; }
 
-    public string Image { get; set; }
+    public string Image { get; set; } = string.Empty;
   }
 }

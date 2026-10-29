@@ -1,5 +1,7 @@
 # Stock Management App
 
+[![CI](https://github.com/PhillipMarais/Stock-Management-App/actions/workflows/ci.yml/badge.svg)](https://github.com/PhillipMarais/Stock-Management-App/actions/workflows/ci.yml)
+
 A full-stack vehicle stock management app. Users sign in, browse the vehicle inventory, and add, edit or remove vehicles together with their images and accessories.
 
 The front end is built with **Angular** and the back end is an **ASP.NET Core Web API** with **Entity Framework Core** and **SQL Server**. Sign-in uses **Firebase Authentication**.
@@ -18,7 +20,7 @@ The front end is built with **Angular** and the back end is an **ASP.NET Core We
 | Layer | Technologies |
 | --- | --- |
 | Front end | Angular 16, TypeScript, Angular Material, PrimeNG, Bootstrap, ngx-pagination, ngx-toastr |
-| Back end | ASP.NET Core Web API (.NET 6), Entity Framework Core 7 (code-first migrations), Swagger |
+| Back end | ASP.NET Core Web API (.NET 10), Entity Framework Core 10 (code-first migrations), Swagger |
 | Database | SQL Server |
 | Auth and hosting | Firebase Authentication, Firebase Hosting config |
 
@@ -54,7 +56,7 @@ dataScript/        SQL script for the database
 
 ## Running locally
 
-**You will need:** Node.js with the Angular CLI 16, the .NET 6 SDK, and SQL Server Express (or update the connection string for another SQL Server instance).
+**You will need:** Node.js 18 or newer, the .NET 10 SDK, and SQL Server Express (or update the connection string for another SQL Server instance).
 
 1. **Database.** Either run `dataScript/data.sql` against SQL Server, or apply the migrations from the API folder:
    ```
@@ -70,3 +72,7 @@ dataScript/        SQL script for the database
    ```
    Then open `http://localhost:4200`. The front end calls the API at the `apiUrl` set in `src/environments/environment.ts`.
 4. **Firebase.** Sign-in uses the Firebase project configured in `src/environments/environment.ts`. To use your own, create a Firebase project with Email/Password sign-in enabled and replace the `firebase` settings there.
+
+## Continuous integration
+
+GitHub Actions builds the API and the front end on every push and pull request. The API build treats warnings as errors and fails if any NuGet package (including indirect ones) has a known vulnerability.

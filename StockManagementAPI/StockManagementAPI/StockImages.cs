@@ -7,6 +7,6 @@ namespace StockManagementAPI
 
     public int StockId { get; set; }
 
-    public byte[] Image { get; set; }
+    public byte[] Image { get; set; } = Array.Empty<byte>();
   }
 }
